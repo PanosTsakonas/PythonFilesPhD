@@ -4,9 +4,9 @@ from numpy import pi,cos,sin,exp
 from scipy.signal import butter, filtfilt
 from matplotlib.pyplot import plot,show,legend,title,xlabel,ylabel
 from scipy.optimize import curve_fit as cf
-import pandas as pd
 
-data=open("C:/Users/u1857308/OneDrive - University of Warwick/PhD/MATLAB Code/Unfilt.csv")#importing the  unfiltered data from MATLAB
+
+data=open("C:/Users/u1857308/OneDrive - University of Warwick/PhD/MATLAB Code/Unfilt.csv","r")#importing the  unfiltered data from MATLAB
 f=np.loadtxt(data,delimiter=",")#Loading the csv file
 t=np.zeros(len(f))#time matrix of length f
 th=np.zeros(len(f))#angle matrix of length f
@@ -17,18 +17,12 @@ for i in range (0,len(f)):
     th[i]=f[i,1]*pi/180#Angles in radians
 
 #Import the moment of inertia
-m="//doozer.ads.warwick.ac.uk/User64/u/u1857308/Documents/flexion_moments.csv"
-I1=pd.read_csv(m,delimiter=",")
-abd=np.array(pd.DataFrame(I1["Abduction"]))
-mcp=np.array(pd.DataFrame(I1["MCP"]))
-pip=np.array(pd.DataFrame(I1["PIP"]))
-dip=np.array(pd.DataFrame(I1["DIP"]))
-Iabd=abd[0]
-Imcp=mcp[0]
-Ipip=pip[0]
-Idip=dip[0]
-print(Imcp)
-
+m=open("//doozer.ads.warwick.ac.uk/User64/u/u1857308/Documents/flexion_moments.csv","r")
+I1=np.loadtxt(m,delimiter=",")
+m.close()
+Imcp=I1[0,0]
+Ipip=I1[0,1]
+Idip=I1[0,2]
 
 #Butterworth 4th order Low pass filter with 20 Hz cut-off
 b1,a1=butter(4,20/200,btype="low")
@@ -45,7 +39,7 @@ p0=(0.4,25,0.2,1,56)
 fit,GoF=cf(fun,t,th,absolute_sigma=True,method="lm")
 
 a,b,c,d,w=fit
-
+print(fit)
 plt.figure(1)
 plot(t,th)
 plot(t,fun(t,a,b,c,d,w))

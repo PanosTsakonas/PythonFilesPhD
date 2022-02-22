@@ -20,7 +20,7 @@ Digit=["Ldip (mm)","Rdip (mm)","Lpip (mm)","Rpip (mm)", "Lmcp (mm)","Rmcp (mm)",
 D=pd.DataFrame([f[Digit[0]], f[Digit[1]],f[Digit[2]],f[Digit[3]],f[Digit[4]],f[Digit[5]],f[Digit[6]],f[Digit[7]],f[Digit[8]]])
 m=np.concatenate(D)
 n1=0
-
+print(len(f[Digit[0]]))
 P=zeros((len(f[Digit[0]]),9))
 for i in range (0,5):
     for j in range (0,9):
