@@ -6,7 +6,12 @@ from matplotlib.pyplot import plot,show,legend,title,xlabel,ylabel
 from scipy.optimize import curve_fit as cf
 import pandas as pd
 
+#When working from University Computer
+#data=open(""C:/Users/u1857308/OneDrive - University of Warwick/PhD/MATLAB Code/Unfilt.csv","r")")
+
+#When working from home laptop
 data=open("C:/Users/panos/OneDrive - University of Warwick/PhD/MATLAB Code/Unfilt.csv","r")#importing the  unfiltered data from MATLAB
+
 f=np.loadtxt(data,delimiter=",")#Loading the csv file
 t=np.zeros(len(f))#time matrix of length f
 th=np.zeros(len(f))#angle matrix of length f
@@ -17,6 +22,7 @@ for i in range (0,len(f)):
     th[i]=f[i,1]*pi/180#Angles in radians
 
 #Import the moment of inertia
+#m="\\doozer.ads.warwick.ac.uk/User64/u/u1857308/Documents/flexion_moments.csv"
 m="C:/Users/panos/Documents/flexion_moments.csv"
 I1=pd.read_csv(m,delimiter=",")
 abd=np.array(pd.DataFrame(I1["Abduction"]))
