@@ -58,12 +58,13 @@ del A, B, C, D, B2, x, x1,t
 
 problem={
    'num_vars':3,
-   'names':['k','b','i1'],
+   'names':['K','B','I'],
    'bounds':[[K-4*0.0036522, K+4*0.0036522],
              [B1-4*0.00010063, B1+4*0.00010063],
              [I1-I1*20/100, I1+I1*20/100]]
 }
 
+#Creates the parameter space
 param_values = sl.sample(problem, 1024)
 
 def ibk(x,k,b,i1):
