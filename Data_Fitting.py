@@ -34,8 +34,11 @@ Imcp=mcp[0]
 Ipip=pip[0]
 Idip=dip[0]
 
+#Set the sampling frequency
+fs=150
+
 #Butterworth 4th order Low pass filter with 20 Hz cut-off
-b1,a1=butter(4,20/200,btype="low")
+b1,a1=butter(4,20/fs,btype="low")
 th=filtfilt(b1,a1,th)
 
 #The fitting process#
