@@ -112,7 +112,7 @@ ax0.fill_between(x,
                  label=f"{prediction_interval} % prediction interval")
 
 ax0.set_xlabel("Time (s)")
-ax0.set_ylabel("angle(rad)")
+ax0.set_ylabel("angle (rad)")
 ax0.legend(title=r"Underdamped IBK model", loc='upper center')._legend_box.align = "left"
 
 plt.show()
