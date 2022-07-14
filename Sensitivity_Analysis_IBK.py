@@ -59,9 +59,9 @@ del A, B, C, D, B2, x, x1,t
 problem={
    'num_vars':3,
    'names':['k','b','i1'],
-   'bounds':[[K-2*0.0036522, K+2*0.0036522],
-             [B1-2*0.00010063, B1+2*0.00010063],
-             [I1-I1*50/100, I1+I1*50/100]]
+   'bounds':[[K-4*0.0036522, K+4*0.0036522],
+             [B1-4*0.00010063, B1+4*0.00010063],
+             [I1-I1*20/100, I1+I1*20/100]]
 }
 
 param_values = sl.sample(problem, 1024)
@@ -73,7 +73,6 @@ def ibk(x,k,b,i1):
 x = np.linspace(init,last, 2000)
 y=np.array([ibk(x,*params) for params in param_values])
 
-print(y.T)
 # analyse
 sobol_indices = [sb.analyze(problem, Y) for Y in y.T]
 
@@ -91,7 +90,7 @@ for i, ax in enumerate([ax1, ax2, ax3]):
     ax.plot(x, S1s[:, i],
             label=r'S1$_\mathregular{{{}}}$'.format(problem["names"][i]),
             color='black')
-    ax.set_xlabel("x")
+    ax.set_xlabel("Time (s)")
     ax.set_ylabel("First-order Sobol index")
 
     ax.set_ylim(0, 1.04)
@@ -112,8 +111,8 @@ ax0.fill_between(x,
                  alpha=0.5, color='black',
                  label=f"{prediction_interval} % prediction interval")
 
-ax0.set_xlabel("x")
-ax0.set_ylabel("y")
+ax0.set_xlabel("Time (s)")
+ax0.set_ylabel("angle(rad)")
 ax0.legend(title=r"Underdamped IBK model", loc='upper center')._legend_box.align = "left"
 
 plt.show()
