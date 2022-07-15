@@ -79,9 +79,11 @@ y=np.array([ibk(x,*params) for params in param_values])
 # analyse
 sobol_indices = [sb.analyze(problem, Y) for Y in y.T]
 
-
+#Determining the first order Sobol indices
 S1s = np.array([s['S1'] for s in sobol_indices])
 S1_cnf=np.array([s['S1_conf'] for s in sobol_indices])
+
+
 fig = plt.figure(3, figsize=(10, 6), constrained_layout=True)
 
 gs = fig.add_gridspec(3, 3)
@@ -115,14 +117,14 @@ ax0.plot(x, np.mean(y, axis=0), label="Mean", color='black')
 ax0.fill_between(x,
                  np.percentile(y, 50 - prediction_interval/2., axis=0),
                  np.percentile(y, 50 + prediction_interval/2., axis=0),
-                 alpha=0.5, color='black',
+                 alpha=0.2, color='black',
                  label=f"{prediction_interval} % prediction interval")
 
 ax0.set_xlabel("Time (s)")
 ax0.set_ylabel("angle (rad)")
 ax0.legend(title=r"Underdamped IBK model", loc='upper center')._legend_box.align = "left"
 
-#Determing the total-order indices
+#Determinig the total-order indices
 STs=np.array([s['ST'] for s in sobol_indices])
 ST_cnf=np.array([s['ST_conf'] for s in sobol_indices])
 
@@ -134,14 +136,17 @@ for i, ax1a in enumerate([ax1p[0], ax1p[1], ax1p[2]]):
             label=r'S1$_\mathregular{{{}}}$'.format(problem["names"][i]),
             color='black')
     ax1a.set_xlabel("Time (s)")
-    ax1a.set_ylabel("Second order Sobol index")
+    ax1a.set_ylabel("Total order Sobol index")
 
     ax1a.set_ylim(0, 1.04)
     ax1a.fill_between(x, STs[:,i]+ST_cnf[:,i], STs[:,i]-ST_cnf[:,i],alpha=0.2,color='black',
                       label=f"{prediction_interval} % confidence interval")
+    if i==1:
+        ax1a.legend(loc='lower right')
+    else:
+        ax1a.legend(loc='upper right')
     ax1a.yaxis.set_label_position("right")
     ax1a.yaxis.tick_right()
 
-    ax1a.legend(loc='upper right')
 plt.show()
 
