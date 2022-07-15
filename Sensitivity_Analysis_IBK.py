@@ -141,7 +141,7 @@ for i, ax1a in enumerate([ax1p[0], ax1p[1], ax1p[2]]):
     ax1a.set_ylim(0, 1.04)
     ax1a.fill_between(x, STs[:,i]+ST_cnf[:,i], STs[:,i]-ST_cnf[:,i],alpha=0.2,color='black',
                       label=f"{prediction_interval} % confidence interval")
-    if i==1:
+    if i==0:
         ax1a.legend(loc='lower right')
     else:
         ax1a.legend(loc='upper right')
