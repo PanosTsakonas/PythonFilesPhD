@@ -40,22 +40,24 @@ u1 = np.zeros(N)+K*theq*np.ones(N)
 t, y, x = signal.lsim(sys, u, t, x0)
 t, y1, x1 =signal.lsim(sys1, u1, t, x0)
 
-plt.figure(1)
+pl1=plt.figure(1)
 plt.plot(t, y*180/pi)
 plt.title("Free response of IBK state space model")
 plt.xlabel("Time (s)")
 plt.ylabel("angle (degrees)")
-plt.show()
 
-plt.figure(2)
+
+pl2=plt.figure(2)
 plt.plot(t, (y-y1)*180/pi)
 plt.title("Difference between the two methods of state space")
 plt.xlabel("Time (s)")
 plt.ylabel("angle (degrees)")
-plt.show()
+
 
 del A, B, C, D, B2, x, x1,t
-n=int(input("Give the number to multiply the standard deviations: "))
+
+n=float(input("Give the number to multiply the standard deviations: "))
+
 problem={
    'num_vars':3,
    'names':['K','B','I'],
@@ -79,21 +81,26 @@ sobol_indices = [sb.analyze(problem, Y) for Y in y.T]
 
 
 S1s = np.array([s['S1'] for s in sobol_indices])
+S1_cnf=np.array([s['S1_conf'] for s in sobol_indices])
+fig = plt.figure(3, figsize=(10, 6), constrained_layout=True)
 
-fig = plt.figure(3,figsize=(10, 6), constrained_layout=True)
 gs = fig.add_gridspec(3, 3)
 
 ax0 = fig.add_subplot(gs[:, 0])
 ax1 = fig.add_subplot(gs[0, 1])
 ax2 = fig.add_subplot(gs[1, 1])
 ax3 = fig.add_subplot(gs[2, 1])
+# in percent
+prediction_interval = 95
+
 for i, ax in enumerate([ax1, ax2, ax3]):
     ax.plot(x, S1s[:, i],
             label=r'S1$_\mathregular{{{}}}$'.format(problem["names"][i]),
             color='black')
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("First-order Sobol index")
-
+    ax.fill_between(x,S1s[:,i]+S1_cnf[:,i], S1s[:,i]-S1_cnf[:,i], alpha=0.2, color='black'
+                    ,label=f"{prediction_interval} % confidence interval")
     ax.set_ylim(0, 1.04)
 
     ax.yaxis.set_label_position("right")
@@ -103,8 +110,7 @@ for i, ax in enumerate([ax1, ax2, ax3]):
 
 ax0.plot(x, np.mean(y, axis=0), label="Mean", color='black')
 
-# in percent
-prediction_interval = 95
+
 
 ax0.fill_between(x,
                  np.percentile(y, 50 - prediction_interval/2., axis=0),
@@ -116,4 +122,26 @@ ax0.set_xlabel("Time (s)")
 ax0.set_ylabel("angle (rad)")
 ax0.legend(title=r"Underdamped IBK model", loc='upper center')._legend_box.align = "left"
 
+#Determing the total-order indices
+STs=np.array([s['ST'] for s in sobol_indices])
+ST_cnf=np.array([s['ST_conf'] for s in sobol_indices])
+
+
+fig1, ax1p=plt.subplots(3)
+
+for i, ax1a in enumerate([ax1p[0], ax1p[1], ax1p[2]]):
+    ax1a.plot(x, STs[:, i],
+            label=r'S1$_\mathregular{{{}}}$'.format(problem["names"][i]),
+            color='black')
+    ax1a.set_xlabel("Time (s)")
+    ax1a.set_ylabel("Second order Sobol index")
+
+    ax1a.set_ylim(0, 1.04)
+    ax1a.fill_between(x, STs[:,i]+ST_cnf[:,i], STs[:,i]-ST_cnf[:,i],alpha=0.2,color='black',
+                      label=f"{prediction_interval} % confidence interval")
+    ax1a.yaxis.set_label_position("right")
+    ax1a.yaxis.tick_right()
+
+    ax1a.legend(loc='upper right')
 plt.show()
+
